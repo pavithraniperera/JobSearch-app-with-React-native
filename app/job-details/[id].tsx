@@ -2,6 +2,7 @@
 import {View,Text,SafeAreaView,ScrollView,ActivityIndicator,RefreshControl} from "react-native";
 import {Stack,useRouter,useGlobalSearchParams} from "expo-router";
 import {useCallback, useState} from "react";
+import { Share } from "react-native";
 import {
     Company,
     JobAbout,
@@ -12,7 +13,6 @@ import {
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import {useFetch} from "../../hook/useFetch";
-import {Colors} from "react-native/Libraries/NewAppScreen";
 import styles from "../../styles/search";
 import React from "react";
 const tabs = ["About", "Qualifications", "Responsibilities"];
@@ -22,6 +22,7 @@ const JobDetails = () => {
     const { data, isLoading, error, refetch } = useFetch("job-details", {
         job_id: params.id,
     });
+
     const [refreshing, setRefreshing] = useState(false);
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -57,6 +58,27 @@ const JobDetails = () => {
                 return null;
         }
     };
+    const handleShare = async () => {
+        try {
+            const result = await Share.share({
+                message: "Check out this  app! ",
+                url: "", // Replace with your actual URL
+                title: "Share this App",
+            });
+
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    console.log("Shared via", result.activityType);
+                } else {
+                    console.log("Shared");
+                }
+            } else if (result.action === Share.dismissedAction) {
+                console.log("Share dismissed");
+            }
+        } catch (error) {
+            console.error("Error sharing:", error);
+        }
+    };
 
     return (
        <SafeAreaView style={{flex:1,backgroundColor:COLORS.lightWhite}}>
@@ -73,7 +95,9 @@ const JobDetails = () => {
                        />
                    ),
                    headerRight: () => (
-                       <ScreenHeaderBtn iconUrl={icons.share} dimension='60%' />
+                       <ScreenHeaderBtn iconUrl={icons.share} dimension='60%'
+                                        handlePress={handleShare}
+                       />
                    ),
                    headerTitle: "",
                }}
@@ -112,7 +136,7 @@ const JobDetails = () => {
 
             </ScrollView>
 
-               <JobFooter url={data[0]?.job_google_link ?? 'https://careers.google.com/jobs/results/'} />
+               <JobFooter url={data[0]?.job_apply_link ?? 'https://careers.google.com/jobs/results/'} />
            </>
 
        </SafeAreaView>

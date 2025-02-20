@@ -1,9 +1,8 @@
-import {Stack} from 'expo-router'
-import {useFonts} from "expo-font";
+import { Stack } from "expo-router";
+import { useFonts } from "expo-font";
 
 
-
-const layout = ()=>{
+const Layout = () => {
     const [fontsLoaded] = useFonts({
         DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
         DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
@@ -13,6 +12,11 @@ const layout = ()=>{
     if (!fontsLoaded) {
         return null;
     }
-    return <Stack/>
-}
-export default layout
+
+    return (
+        <Stack>
+        </Stack>
+    )
+};
+
+export default Layout;
