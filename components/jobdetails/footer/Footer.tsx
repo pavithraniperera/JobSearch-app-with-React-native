@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { View, Text ,TouchableOpacity,Image,Linking} from 'react-native'
 import {icons} from "../../../constants";
 
@@ -7,13 +7,18 @@ import {useNavigation} from "expo-router";
 
 
 const Footer = ({url}) => {
+    const [isLiked, setIsLiked] = useState(false);
+    const toggleLike = () => {
+        setIsLiked(!isLiked);
+    };
 
-  return (
+
+    return (
     <View style={styles.container}>
-        <TouchableOpacity style={styles.likeBtn}>
+        <TouchableOpacity style={styles.likeBtn} onPress={toggleLike}>
             <Image
-                source={icons.heartOutline}
-                resizeMode='contain'
+                source={isLiked ? icons.heart : icons.heartOutline} // Change icon dynamically
+                resizeMode="contain"
                 style={styles.likeBtnImage}
             />
         </TouchableOpacity>

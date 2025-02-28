@@ -3,7 +3,6 @@ import {useState} from "react";
 import { View, Text ,TouchableOpacity,FlatList,ActivityIndicator,Image} from 'react-native'
 import {useRouter} from "expo-router";
 import styles, {container, jobName, logContainer} from './popularjobcard.style'
-import {COLORS,SIZES} from "../../../../constants";
 
 
 const PopularJobCard = ({item,selectedJob,handleCardPress}) => {
