@@ -1,12 +1,24 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert} from 'react-native';
 import { COLORS, FONT, SIZES, images, icons } from '../../../constants'; // Import constants and images
 import styles from './profile.style'
 import {Stack} from "expo-router";
 import {ScreenHeaderBtn} from "../../../components";
 import {router} from "expo-router";
+import { signOut } from "firebase/auth";
+import {auth} from "../../../utils/FirebaseConfig";
+
 
 const Profile = () => {
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            Alert.alert('Success', 'Logged out successfully');
+            router.push('/')
+        } catch (error) {
+            Alert.alert('Error', 'Logout failed');
+        }
+    };
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Stack.Screen  options={{
@@ -42,7 +54,7 @@ const Profile = () => {
                 <TouchableOpacity style={styles.button} onPress={() => alert('Change Password')}>
                     <Text style={styles.buttonText}>Change Password</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => router.push('/')}>
+                <TouchableOpacity style={styles.button} onPress={() =>handleLogout()}>
                     <Text style={styles.buttonText}>Logout</Text>
                 </TouchableOpacity>
             </View>

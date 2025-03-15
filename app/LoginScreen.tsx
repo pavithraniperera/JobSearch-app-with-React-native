@@ -3,6 +3,8 @@ import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView
 import {Stack, useRouter} from "expo-router";
 import { COLORS, SIZES } from "../constants";
 import axios from "axios";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import {auth} from "../utils/FirebaseConfig";
 
 const LoginScreen = () => {
     const router = useRouter();
@@ -17,13 +19,22 @@ const LoginScreen = () => {
         }
     };*/
 
-    const handleLogin = async () => {
+   /* const handleLogin = async () => {
         try {
            // const res = await axios.post('http:///192.168.110.76:3002/auth/login', { email, password });
             Alert.alert('Success', 'Logged in successfully');
             router.push("Home/HomeScreen");
         } catch (error) {
             Alert.alert('Error', error.response?.data?.message || 'Login failed');
+        }
+    };*/
+    const handleLogin = async () => {
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            Alert.alert('Success', 'Login successful');
+            router.push("Home/HomeScreen"); // Navigate to home screen
+        } catch (error: any) {
+            Alert.alert('Error', error.message || 'Login failed');
         }
     };
 

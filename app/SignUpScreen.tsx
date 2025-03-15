@@ -4,6 +4,8 @@ import {Stack, useRouter} from "expo-router";
 import {COLORS, icons, SIZES} from "../constants";
 import axios from "axios";
 import {ScreenHeaderBtn} from "../components";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import {auth} from "../utils/FirebaseConfig";
 
 const LoginScreen = () => {
     const router = useRouter();
@@ -14,11 +16,17 @@ const LoginScreen = () => {
 
     const handleSignUp = async () => {
         try {
-            //const res = await axios.post('http://192.168.110.76:3002/auth/register', {name, email, password });
-            Alert.alert('Success', 'SignUp in successfully');
+            await createUserWithEmailAndPassword(auth, email, password);
+            Alert.alert("Success", "SignUp successful!");
             router.push("LoginScreen");
-        } catch (error) {
-            Alert.alert('Error', error.response?.data?.message || 'SignUp failed');
+        } catch (error: any) {
+            if (error.code === "auth/invalid-email") {
+                Alert.alert("Error", "Invalid email format. Please enter a valid email.");
+            } else if (error.code === "auth/email-already-in-use") {
+                Alert.alert("Error", "This email is already registered. Try logging in.");
+            } else {
+                Alert.alert("Error", error.message || "SignUp failed");
+            }
         }
     };
 
@@ -46,7 +54,6 @@ const LoginScreen = () => {
                 style={styles.input}
                 placeholder="Name"
                 placeholderTextColor={COLORS.gray}
-                secureTextEntry
                 value={name}
                 onChangeText={setName}
             />
